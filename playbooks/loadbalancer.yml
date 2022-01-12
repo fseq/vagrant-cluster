@@ -1,0 +1,31 @@
+---
+- name: config loadbalancer
+  hosts: main
+  #remote_user: root
+
+  tasks:
+    - name: update apt
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      become: true
+    
+    - name: install haproxy
+      apt:
+        name: haproxy
+        update_cache: true
+      become: true
+
+    - name: haproxy config
+      ansible.builtin.copy:
+        src: static/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
+      become: true
+
+    - name: restart haproxy service
+      ansible.builtin.systemd:
+        name: haproxy.service
+        state: restarted
+      become: true

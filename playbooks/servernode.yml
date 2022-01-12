@@ -1,0 +1,43 @@
+---
+- name: config server
+  hosts: node-1,node-2
+  #remote_user: root
+
+  tasks:
+    - name: update apt
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      become: true
+    
+    - name: install apache
+      apt:
+        name: apache2
+        update_cache: true
+      become: true
+
+- name: add content
+  hosts: node-1
+
+  tasks:
+    - name: add website
+      ansible.builtin.copy:
+        src: static/node-1/index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
+      become: true
+
+- name: add content
+  hosts: node-2
+
+  tasks:
+    - name: add website
+      ansible.builtin.copy:
+        src: static/node-2/index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
+      become: true
