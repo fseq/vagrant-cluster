@@ -1,24 +1,24 @@
 ---
-- name: config server
+- name: Setup server
   hosts: node-1,node-2
   #remote_user: root
 
   tasks:
-    - name: update apt
+    - name: Update apt
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
       become: true
     
-    - name: install apache
+    - name: Install Apache
       apt:
         name: apache2
         update_cache: true
       become: true
 
-- name: add content
+- name: Add content
   hosts: node-1
 
   tasks:
-    - name: add website
+    - name: Add website
       ansible.builtin.copy:
         src: static/node-1/index.html
         dest: /var/www/html/index.html
@@ -28,11 +28,11 @@
         backup: yes
       become: true
 
-- name: add content
+- name: Add content
   hosts: node-2
 
   tasks:
-    - name: add website
+    - name: Add website
       ansible.builtin.copy:
         src: static/node-2/index.html
         dest: /var/www/html/index.html
