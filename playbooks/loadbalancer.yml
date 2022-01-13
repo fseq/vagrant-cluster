@@ -1,10 +1,10 @@
 ---
-- name: config loadbalancer
+- name: Setup loadbalancer
   hosts: main
   #remote_user: root
 
   tasks:
-    - name: update apt
+    - name: Update apt
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
       become: true
     
@@ -14,33 +14,34 @@
       #        update_cache: true
       #      become: true
       
-    - name: install gpg
+    - name: Install GPG
       apt:
         name: gnupg
         update_cache: true
       become: true
 
-    - name: import haproxy keyrings
+    - name: Import HAProxy keyring
       apt_key:
         url: https://haproxy.debian.net/bernat.debian.org.gpg
         state: present
       become: true
 
-    - name: install haproxy repo
+    - name: Add HAProxy repo
       apt_repository:
-        repo: deb http://haproxy.debian.net buster-backports-2.5 main
+        repo: deb http://haproxy.debian.net buster-backports-2.4 main
         state: present
         update_cache: yes
       become: true
 
-    - name: install haproxy
+    - name: Install HAProxy
       apt:
         name: haproxy
         state: present
         update_cache: true
+        default_release: buster-backports-2.4
       become: true
 
-    - name: haproxy config
+    - name: Configure HAProxy 
       ansible.builtin.copy:
         src: static/haproxy.cfg
         dest: /etc/haproxy/haproxy.cfg
@@ -50,10 +51,11 @@
         backup: yes
       become: true
 
-    - name: restart haproxy service
+    - name: Restart HAProxy service
       ansible.builtin.systemd:
         name: haproxy.service
         state: restarted
+      ignore_errors:  yes
       become: true
 
       #apt update
@@ -61,7 +63,7 @@
       #curl https://haproxy.debian.net/bernat.debian.org.gpg \
       #| gpg --dearmor > /usr/share/keyrings/haproxy.debian.net.gpg
       #echo deb "[signed-by=/usr/share/keyrings/haproxy.debian.net.gpg]" \
-      #http://haproxy.debian.net buster-backports-2.5 main \
+      #http://haproxy.debian.net buster-backports-2.4 main \
       # > /etc/apt/sources.list.d/haproxy.list
       #apt update
       #apt install -y haproxy
