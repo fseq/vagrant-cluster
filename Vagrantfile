@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "main" do |main|
     main.vm.box = "generic/debian10"
     main.vm.hostname = "nodemain"
-    main.vm.network "forwarded_port", guest: 80, host: 3000
+    main.vm.network "forwarded_port", guest: 80, host: 8888 
     main.vm.network "forwarded_port", guest: 8404, host: 8404
     main.vm.network :private_network, ip: "192.168.44.10"
     config.vm.provision "ansible" do |ansible|
