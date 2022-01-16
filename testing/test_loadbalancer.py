@@ -2,10 +2,19 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
 
+#add TLS for Chrome
+def testSelenium(url):
+    #options = Options()
+    #options.headless = True
+    #driver = webdriver.Firefox(options=options)
+    driver = webdriver.Chrome()
+    driver.get(url)
+    print(driver.title)
 
 def getResponse(url):
     response = requests.get(url)
@@ -25,4 +34,6 @@ def testSequence(amount, request_pause):
         sleep(request_pause)
 
 if __name__ == "__main__":
-    testSequence(20,0.1)
+    #testSequence(20,0.1)
+    testSelenium("http://localhost:3000") 
+    testSequence(30,0.3)
