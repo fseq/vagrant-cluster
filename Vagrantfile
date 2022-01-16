@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     main.vm.hostname = "nodemain"
     main.vm.network "forwarded_port", guest: 80, host: 8888 
     main.vm.network "forwarded_port", guest: 8404, host: 8404
-    main.vm.network :private_network, ip: "192.168.44.10"
+    main.vm.network :private_network, ip: "192.168.122.10"
     config.vm.provision "ansible" do |ansible|
       ansible.verbose = "v"
       ansible.playbook = "playbooks/loadbalancer.yml"
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "node-#{i}" do |node|
       node.vm.hostname = "node-#{i}"
       node.vm.box = "generic/debian10"
-      node.vm.network :private_network, ip: "192.168.44.#{10+i}"
+      node.vm.network :private_network, ip: "192.168.122.#{10+i}"
       config.vm.provision "ansible" do |ansible|
         ansible.verbose = "v"
         ansible.playbook = "playbooks/servernode.yml"
